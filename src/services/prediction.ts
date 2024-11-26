@@ -111,6 +111,46 @@ const getTodaysProfit =async()=> {
       throw error;
     }
   };
+
+  //return
+  const addOrUpdatePrizes = async () => {
+    try {
+      // Iterate over the prize_config array and process each prize
+      const addedPrizes = [];
+      const prize_config = await configurePrizes()
+      for (let prize of prize_config) {
+        const existingPrize = await prisma.prize.findFirst({
+          where: {
+            name: `X${prize.value}`,
+            value: prize.value,
+            probability: prize.probability
+          }
+        });
+  
+        if (!existingPrize) {
+          // If the prize doesn't exist, create a new one
+          const newPrize = await prisma.prize.create({
+            data: {
+              name: `X${prize.value}`,
+              value: prize.value,
+              probability: prize.probability,
+              sentCount: 0, // Initial sent count is 0
+            }
+          });
+          console.log(`Prize with value ${prize.value} and probability ${prize.probability} created.`);
+          addedPrizes.push(newPrize);
+        } else {
+          // If the prize exists, log that it was skipped
+          console.log(`Prize with value ${prize.value} and probability ${prize.probability} already exists.`);
+          addedPrizes.push(existingPrize)
+        }
+      }
+      return addedPrizes;
+    } catch (error) {
+      console.error('Error adding or updating prizes:', error);
+      throw error;
+    }
+  };
   
   
-  export {getTodaysProfit,configurePrizes}
+  export {getTodaysProfit,configurePrizes,addOrUpdatePrizes}

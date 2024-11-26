@@ -1,7 +1,7 @@
 //predion controller
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
-import { getTodaysProfit,configurePrizes } from "../services/prediction";
+import { getTodaysProfit,configurePrizes,addOrUpdatePrizes } from "../services/prediction";
 
 const TodaysProfit = asyncHandler(async(req:Request,res:Response)=>{
     try{
@@ -22,4 +22,13 @@ const ConfigurePrizes = asyncHandler(async(req:Request,res:Response)=>{
             res.status(500).json({message:err.message})
             }
             })
-export {TodaysProfit,ConfigurePrizes}
+            const AddOrUpdatePrizes = asyncHandler(async(req:Request,res:Response)=>{
+                try{
+                    const data = await addOrUpdatePrizes()
+                    res.status(200).json({message:data})
+                    }catch(err:any){
+                        console.log("add or update prizes",err)
+                        res.status(500).json({message:err.message})
+                        }
+                        })
+export {TodaysProfit,ConfigurePrizes,AddOrUpdatePrizes}
