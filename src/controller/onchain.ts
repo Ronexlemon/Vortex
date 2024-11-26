@@ -4,6 +4,9 @@ import { Deposit,returnWinAmount } from "../services/onchain"
 import { Response,Request } from "express"
 import { ethers } from "ethers";
 import { signer } from "../test/signer";
+import { Spin } from "../services/spin";
+import { empty } from "@prisma/client/runtime/library";
+import { addOrUpdatePrizes } from "../services/prediction";
 
 
 interface StakeRequestBody {
@@ -15,7 +18,14 @@ interface StakeRequestBody {
     const {amount} = req.body
     console.log("body bodyy",req.body); 
     try{
-        console.log("starting with the tx")
+        await addOrUpdatePrizes()
+        const probabilities = await Spin()
+        if (!probabilities || probabilities.length === 0) {
+            res.status(400).json({ message: "Failed to spin" });
+            return;
+          }
+        const pro = probabilities.filter((prob)=>prob.probability === 100);
+        console.log("starting with the tx choosing prob",pro)
         const recipientAddress = await signer.getAddress()
         console.log("recipient address",recipientAddress)
         if (!recipientAddress){
@@ -27,7 +37,7 @@ interface StakeRequestBody {
              res.status(400).json({message:"Failed to stake"})
              return
         }
-        const winAmount = await returnWinAmount(signer,recipientAddress as `0x${string}`,amount,0.1)
+        const winAmount = await returnWinAmount(signer,recipientAddress as `0x${string}`,amount,pro[0].value)
         if(!winAmount){
             res.status(400).json({message:"Failed to stake"})
             return

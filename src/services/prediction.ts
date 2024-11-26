@@ -41,29 +41,29 @@ const getTodaysProfit =async()=> {
         case 0:
           // Profit <= 10,000
           prizes_config.push(
-            { value: 1, probability: 50 },
-            { value: 3, probability: 30 },
-            { value: 7, probability: 20 }
+            { value: 0.1, probability: 50 },
+            { value: 0.3, probability: 30 },
+            { value: 0.7, probability: 20 }
           );
           break;
   
         case 1:
           // Profit > 10,000 and <= 20,000
           prizes_config.push(
-            { value: 1, probability: 40 },
-            { value: 2, probability: 30 },
-            { value: 5, probability: 20 },
-            { value: 10, probability: 10 }
+            { value: 0.1, probability: 40 },
+            { value: 0.2, probability: 30 },
+            { value: 0.5, probability: 20 },
+            { value: 0.8, probability: 10 }
           );
           break;
   
         case 2:
           // Profit > 20,000 and <= 30,000
           prizes_config.push(
-            { value: 1, probability: 30 },
-            { value: 3, probability: 25 },
-            { value: 7, probability: 20 },
-            { value: 10, probability: 25 }
+            { value: 0.1, probability: 30 },
+            { value: 0.3, probability: 25 },
+            { value: 0.7, probability: 20 },
+            { value: 2, probability: 25 }
           );
           break;
   
@@ -72,34 +72,34 @@ const getTodaysProfit =async()=> {
           prizes_config.push(
             { value: 1, probability: 20 },
             { value: 2, probability: 25 },
-            { value: 4, probability: 30 },
-            { value: 10, probability: 25 }
+            { value: 3, probability: 30 },
+            { value: 4, probability: 25 }
           );
           break;
   
         case 4:
           // Profit > 50,000 and <= 100,000
           prizes_config.push(
-            { value: 1, probability: 10 },
-            { value: 3, probability: 20 },
-            { value: 5, probability: 25 },
-            { value: 8, probability: 45 }
+            { value: 0.1, probability: 10 },
+            { value: 0.2, probability: 20 },
+            { value: 0.3, probability: 25 },
+            { value: 3, probability: 45 }
           );
           break;
   
         case 5:
           // Profit > 100,000
           prizes_config.push(
-            { value: 5, probability: 30 },
-            { value: 10, probability: 25 },
-            { value: 20, probability: 15 },
-            { value: 50, probability: 30 }
+            { value: 0.5, probability: 30 },
+            { value: 1, probability: 25 },
+            { value: 2, probability: 15 },
+            { value: 5, probability: 30 }
           );
           break;
   
         default:
           // Handle unexpected profit ranges (if any)
-          console.log("Unexpected profit value: ", profit);
+          console.log("Unexpected profit value: ", typeof(profit));
           break;
       }
   
@@ -151,6 +151,24 @@ const getTodaysProfit =async()=> {
       throw error;
     }
   };
+
+  //
+  const createOrUpdateProfit = async(profit:number)=>{
+    
+    try{
+        const today = new Date();
+        const newDailyProfit = await prisma.dailyProfit.create({
+            data: {
+              Date: today,
+              Profit: profit,
+            },
+          });
+          return newDailyProfit;
+    }catch(err){
+        console.error('Error creating/updating daily profit:', err);
+        throw err;
+    }
+  }
   
   
-  export {getTodaysProfit,configurePrizes,addOrUpdatePrizes}
+  export {getTodaysProfit,configurePrizes,addOrUpdatePrizes,createOrUpdateProfit}

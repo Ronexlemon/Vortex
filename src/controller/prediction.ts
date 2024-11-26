@@ -36,7 +36,7 @@ const ConfigurePrizes = asyncHandler(async(req:Request,res:Response)=>{
                         const Spins = asyncHandler(async(req:Request,res:Response)=>{
                             const {betAmount}= req.body
                             try{
-                                const data = await Spin(betAmount)
+                                const data = await Spin()
                                 res.status(200).json({message:data})
                                 }catch(err:any){
                                     console.log("spin",err)
