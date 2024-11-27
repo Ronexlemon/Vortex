@@ -10,7 +10,8 @@
     "migrate": "npx prisma migrate dev",
     "db:seed": "npx prisma db seed",
     "db:reset": "npx prisma db reset",
-    "generate": "npx prisma generate"
+    "generate": "npx prisma generate",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
