@@ -5,13 +5,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec npx ts-node  index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "eslint .",
+    "migrate": "npx prisma migrate dev",
+    "db:seed": "npx prisma db seed",
+    "db:reset": "npx prisma db reset",
+    "generate": "npx prisma generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@prisma/client": "5.22.0",
     "@types/node": "^22.9.3",
     "async-handler": "^0.0.3",
     "axios": "^1.7.8",
@@ -27,9 +33,11 @@
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
+    "vercel": "^39.1.2",
     "wagmi": "^2.13.0"
   },
   "devDependencies": {
-    "@types/express": "^5.0.0"
+    "@types/express": "^5.0.0",
+    "prisma": "5.22.0"
   }
 }

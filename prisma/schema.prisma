@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model Prize{
+  id       String   @id @default(cuid())
+  name     String
+  value  Float
+  probability Float
+  sentCount Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  spins  Spin[]
+}
+model Spin{
+  id       String   @id @default(cuid())
+  betAmount Float
+  prizeId  String
+  userId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  
+  prize    Prize    @relation(fields: [prizeId], references: [id])
+}
+
+model DailyProfit{
+  id       String   @id @default(cuid())
+  Date     DateTime
+  Profit  Float
+}
