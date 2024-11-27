@@ -33,6 +33,7 @@
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
+    "vercel": "^39.1.2",
     "wagmi": "^2.13.0"
   },
   "devDependencies": {
