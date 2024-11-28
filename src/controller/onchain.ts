@@ -43,9 +43,9 @@ interface StakeRequestBody {
             return
             }
             res.json({message:"Staked successfully",data:pro[0]})
-            }catch(err){
+            }catch(err:any){
                 console.log(err)
-                res.status(400).json({message:"Failed to stake error",err})
+                res.status(400).json({message:"Failed to stake error",data:err.message})
                 }
     
 
