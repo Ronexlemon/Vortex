@@ -34,18 +34,18 @@ interface StakeRequestBody {
         }
         const depositTx = await Deposit(signer,amount)
         if(!depositTx){
-             res.status(400).json({message:"Failed to stake"})
+             res.status(400).json({message:"Failed to stake Deposit"})
              return
         }
         const winAmount = await returnWinAmount(signer,recipientAddress as `0x${string}`,amount,pro[0].value)
         if(!winAmount){
-            res.status(400).json({message:"Failed to stake"})
+            res.status(400).json({message:"Failed to return winnings"})
             return
             }
             res.json({message:"Staked successfully",data:pro[0]})
             }catch(err){
                 console.log(err)
-                res.status(400).json({message:"Failed to stake"})
+                res.status(400).json({message:"Failed to stake error",err})
                 }
     
 
