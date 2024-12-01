@@ -110,4 +110,55 @@ const StakeSign = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-export {Stake,test,StakeSign}
+
+//new
+const StakeSignWithHash = asyncHandler(async (req: Request, res: Response) => {
+  //const { signedTx, amount, userAddress } = req.body;
+  const { txHash, signature, address,amount } = req.body;
+
+  console.log("Received signed transaction:", txHash);
+  console.log("Received signature:", signature);
+  console.log("Amount to stake:", amount);
+
+  try {
+    // Broadcast the signed transaction to the network
+    const recoveredAddress =  ethers.verifyMessage(txHash, signature);
+    if (recoveredAddress.toLowerCase() != address.toLowerCase()) {
+      res.status(200).json({ message: "Transaction signature is Invalid!" });
+      return}
+
+   
+    await addOrUpdatePrizes()
+        const probabilities = await Spin()
+        if (!probabilities || probabilities.length === 0) {
+            res.status(400).json({ message: "Failed to spin" });
+            return;
+          }
+        const pro = probabilities.filter((prob)=>prob.probability === 100);
+        console.log("starting with the tx choosing prob",pro)
+        
+        if (!recoveredAddress){
+             res.status(400).json({message: "User not logged in"})
+             return
+        }
+   
+    const winAmount = await returnWinAmount(VortexSingener,recoveredAddress as `0x${string}`,amount,pro[0].value)
+        if(!winAmount){
+            res.status(400).json({message:"Failed to return winnings"})
+            return
+            }
+
+    // Send back the transaction receipt or success message
+    res.json({
+      success: true,
+      message: "Transaction successfully broadcasted!",
+      transactionHash: winAmount,
+      data:pro[0]
+    });
+  } catch (error) {
+    console.error("Error broadcasting transaction:", error);
+    res.status(500).json({ success: false, message: "Error broadcasting transaction" });
+  }
+});
+
+export {Stake,test,StakeSign,StakeSignWithHash}
