@@ -8,6 +8,7 @@ import { Spin } from "../services/spin";
 import { empty } from "@prisma/client/runtime/library";
 import { addOrUpdatePrizes } from "../services/prediction";
 import { getSigner } from "../config/signer";
+import { recoverAddressFromTxHash } from "../utils/recoverAddressFromTx";
 
 
 
@@ -122,10 +123,15 @@ const StakeSignWithHash = asyncHandler(async (req: Request, res: Response) => {
 
   try {
     // Broadcast the signed transaction to the network
-    const recoveredAddress =  ethers.verifyMessage(txHash, signature);
+    const {address:recoveredAddress,signature:Signature} =  await recoverAddressFromTxHash(txHash);
     if (recoveredAddress.toLowerCase() != address.toLowerCase()) {
-      res.status(200).json({ message: "Transaction signature is Invalid!" });
+      res.status(200).json({ message: "Transaction Address is Invalid!" });
       return}
+      if (Signature.toLowerCase() != signature.toLowerCase()){
+        res.status(200).json({ message: "Transaction signature is Invalid!" });
+        return
+      }
+
 
    
     await addOrUpdatePrizes()
