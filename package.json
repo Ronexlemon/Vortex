@@ -38,6 +38,7 @@
     "wagmi": "^2.13.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "prisma": "5.22.0"
   }
