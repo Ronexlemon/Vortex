@@ -145,7 +145,7 @@ const StakeSignWithHash = asyncHandler(async (req: Request, res: Response) => {
              return
         }
    
-    const winAmount = await returnWinAmount(VortexSingener,address as `0x${string}`,amount,pro[0].value)
+    const winAmount = await returnWinAmount(VortexSingener,address as `0x${string}`,amount.toString(),pro[0].value)
         if(!winAmount){
             res.status(400).json({message:"Failed to return winnings"})
             return
