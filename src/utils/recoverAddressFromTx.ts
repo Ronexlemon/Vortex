@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 interface returnedResult{
     address: string,
-    signature: string,
+    
 }
 import { provider } from "../test/signer";
 export async function recoverAddressFromTxHash(txHash: string): Promise<returnedResult> {
@@ -14,5 +14,5 @@ export async function recoverAddressFromTxHash(txHash: string): Promise<returned
    
    
   
-    return {address:tx?.from as string,signature:tx?.signature as any};
+    return {address:tx?.from as string};
   }

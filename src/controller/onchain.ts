@@ -115,22 +115,19 @@ const StakeSign = asyncHandler(async (req: Request, res: Response) => {
 //new
 const StakeSignWithHash = asyncHandler(async (req: Request, res: Response) => {
   //const { signedTx, amount, userAddress } = req.body;
-  const { txHash, signature, address,amount } = req.body;
+  const { txHash, address,amount } = req.body;
 
   console.log("Received signed transaction:", txHash);
-  console.log("Received signature:", signature);
+  //console.log("Received signature:", signature);
   console.log("Amount to stake:", amount);
 
   try {
     // Broadcast the signed transaction to the network
-    const {address:recoveredAddress,signature:Signature} =  await recoverAddressFromTxHash(txHash);
+    const {address:recoveredAddress} =  await recoverAddressFromTxHash(txHash);
     if (recoveredAddress.toLowerCase() != address.toLowerCase()) {
       res.status(200).json({ message: "Transaction Address is Invalid!" });
       return}
-      if (Signature.toLowerCase() != signature.toLowerCase()){
-        res.status(200).json({ message: "Transaction signature is Invalid!" });
-        return
-      }
+     
 
 
    
@@ -163,7 +160,7 @@ const StakeSignWithHash = asyncHandler(async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error broadcasting transaction:", error);
-    res.status(500).json({ success: false, message: "Error broadcasting transaction" });
+    res.status(500).json({ success: false, message: "Error broadcasting transaction",err:error });
   }
 });
 
