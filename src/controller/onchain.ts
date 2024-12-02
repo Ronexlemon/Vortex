@@ -123,10 +123,10 @@ const StakeSignWithHash = asyncHandler(async (req: Request, res: Response) => {
 
   try {
     // Broadcast the signed transaction to the network
-    const {address:recoveredAddress} =  await recoverAddressFromTxHash(txHash);
-    if (recoveredAddress.toLowerCase() != address.toLowerCase()) {
-      res.status(200).json({ message: "Transaction Address is Invalid!" });
-      return}
+    // const {address:recoveredAddress} =  await recoverAddressFromTxHash(txHash);
+    // if (recoveredAddress.toLowerCase() != address.toLowerCase()) {
+    //   res.status(200).json({ message: "Transaction Address is Invalid!" });
+    //   return}
      
 
 
@@ -140,12 +140,12 @@ const StakeSignWithHash = asyncHandler(async (req: Request, res: Response) => {
         const pro = probabilities.filter((prob)=>prob.probability === 100);
         console.log("starting with the tx choosing prob",pro)
         
-        if (!recoveredAddress){
+        if (!address){
              res.status(400).json({message: "User not logged in"})
              return
         }
    
-    const winAmount = await returnWinAmount(VortexSingener,recoveredAddress as `0x${string}`,amount,pro[0].value)
+    const winAmount = await returnWinAmount(VortexSingener,address as `0x${string}`,amount,pro[0].value)
         if(!winAmount){
             res.status(400).json({message:"Failed to return winnings"})
             return
